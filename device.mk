@@ -159,7 +159,7 @@ PRODUCT_COPY_FILES +=  \
 
 # Charger
 PRODUCT_PACKAGES += \
-    chargeonlymode
+    charger_res_images
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
