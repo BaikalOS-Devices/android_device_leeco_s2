@@ -140,6 +140,11 @@ PRODUCT_COPY_FILES +=  \
 PRODUCT_PACKAGES += \
     Snap
 
+# IR_R
+PRODUCT_PACKAGES += \
+    Remote \
+    Remote_work
+
 ifneq ($(USE_PROPRIETARY_CAMERA),true)
 PRODUCT_PACKAGES += \
     camera.msm8952 \
