@@ -4,7 +4,7 @@
 /(vendor|system/vendor|system)/bin/gx_fpd                   u:object_r:goodix_exec:s0
 
 # Fingerprint
-/system/vendor/bin/hw/android\.hardware\.biometrics\.fingerprint@2\.0-service-custom u:object_r:hal_fingerprint_default_exec:s0
+/vendor/bin/hw/android\.hardware\.biometrics\.fingerprint@2\.1-service\.leeco_s2 u:object_r:hal_fingerprint_default_exec:s0
 
 # Radio
 /data/misc/radio/qcril.db                                   u:object_r:nv_data_file:s0
@@ -22,3 +22,6 @@
 /dev/goodix_fp                                             u:object_r:goodix_device:s0
 /data/goodix(/.*)?                                         u:object_r:goodix_data_file:s0
 /dev/i2c_smartpa                                           u:object_r:smartpa_device:s0
+
+# Sensors
+/vendor/bin/hw/android\.hardware\.sensors@1\.0-service\.s2 u:object_r:hal_sensors_default_exec:s0
