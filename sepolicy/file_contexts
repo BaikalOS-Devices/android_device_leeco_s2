@@ -4,7 +4,7 @@
 /(vendor|system/vendor|system)/bin/gx_fpd                   u:object_r:goodix_exec:s0
 
 # Fingerprint
-/system/vendor/bin/hw/android\.hardware\.biometrics\.fingerprint@2\.0-service-custom u:object_r:hal_fingerprint_default_exec:s0
+/vendor/bin/hw/android\.hardware\.biometrics\.fingerprint@2\.1-service\.leeco_s2 u:object_r:hal_fingerprint_default_exec:s0
 
 # Camera
 /data/vendor/qcam(/.*)?                                     u:object_r:vendor_camera_data_file:s0
@@ -36,3 +36,7 @@
 /(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch@1\.0-service\.s2      u:object_r:hal_lineage_touch_default_exec:s0
 
 /sys/remote/enable                                         u:object_r:sysfs_ir_enable:s0
+
+# Sensors
+/vendor/bin/hw/android\.hardware\.sensors@1\.0-service\.s2 u:object_r:hal_sensors_default_exec:s0
+
