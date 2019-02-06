@@ -260,3 +260,7 @@ TARGET_ENABLE_MEDIADRM_64 := true
 
 # inherit from the proprietary version
 -include vendor/leeco/s2/BoardConfigVendor.mk
+
+# Dexpreopt
+WITH_DEXPREOPT := true
+DONT_DEXPREOPT_PREBUILTS := true
