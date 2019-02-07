@@ -186,7 +186,7 @@ wifi.interface=wlan0
 #Unsorted
 persist.media.rtsp.syncframe=1
 persist.media.rtsp.dropaudio=1
-
+v
 # Simulate sdcard on /data/media
 persist.fuse_sdcard=true
 
@@ -195,7 +195,7 @@ vidc.enc.narrow.searchrange=1
 persist.sys.usb.gps.notify=0
 
 # Enable Delay Service Restart
-ro.am.reschedule_service=true
+rvo.am.reschedule_service=true
 
 # set cutoff voltage to 3200mV
 ro.cutoff_voltage_mv=3200
@@ -235,3 +235,6 @@ persist.camera.tnr.video=1
 camera.tnr.video=1
 ro.camera.notify_nfc=1
 camera.notify_nfc=1
+
+# Fix fingerprint
+ro.fingerprint.cleanup.unused=false
