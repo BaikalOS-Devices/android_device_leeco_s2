@@ -238,3 +238,6 @@ camera.notify_nfc=1
 
 # Fix fingerprint
 ro.fingerprint.cleanup.unused=false
+
+# Disables buggy in-band ringing
+persist.bluetooth.disableinbandringing=1
