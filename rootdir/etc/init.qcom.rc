@@ -410,7 +410,8 @@ on property:sys.boot_completed=1
     write /sys/block/mmcblk0rpmb/queue/read_ahead_kb 128
 
 on property:vold.decrypt=trigger_restart_framework
-    start wcnss-service
+    restart vendor.camera-provider-2-4
+    start vendor.wcnss-service
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
