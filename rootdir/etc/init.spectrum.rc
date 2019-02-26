@@ -205,8 +205,7 @@ on property:persist.spectrum.profile=2
     chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
-    ## Adreno Idler
-    write /sys/module/adreno_idler/parameters/adreno_idler_active "Y"
+    
     ## CPU Governors
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
     restorecon -R /sys/devices/system/cpu # must restore after interactive
