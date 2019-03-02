@@ -28,6 +28,9 @@ on property:persist.spectrum.profile=0
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
 	chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+	#cpu
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
     ## Adreno Idler
     write /sys/module/adreno_idler/parameters/adreno_idler_active "Y"
     ## CPU Governors BIG
@@ -59,7 +62,7 @@ on property:persist.spectrum.profile=0
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
     ## 1843MHz (Default)
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1843200"
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
     ## 400MHz (Default)
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq "400000"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq "400000"
@@ -97,7 +100,18 @@ on property:persist.spectrum.profile=0
 	## RCU
 	write /sys/module/rcutree/parameters/rcu_idle_gp_delay 4
 	write /sys/module/rcutree/parameters/rcu_idle_lazy_gp_delay 6000
-    
+    #cpu_ctrl
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 1
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres 45
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 55
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 55
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 65
+	write /dev/cpuset/top-app/cpus 0-3
+    write /dev/cpuset/foreground/cpus 0-2
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-1
+	
 # Performance
 on property:persist.spectrum.profile=1
     ##Setting Permissions
@@ -109,6 +123,9 @@ on property:persist.spectrum.profile=1
     chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
+	#cpu
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
     ## Adreno Idler
     write /sys/module/adreno_idler/parameters/adreno_idler_active "N"
     ## CPU Governors BIG
@@ -117,9 +134,9 @@ on property:persist.spectrum.profile=1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 90
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 0
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1843200
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1804800
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 30000
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "70 998400:75 1056000:80 1113600:85 1190400:90 1248000:85 1305600:80 1382400:75 1612800:70 1747200:90 1843200:82"
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "70 998400:75 1056000:80 1113600:85 1190400:90 1248000:85 1305600:80 1382400:75 1612800:70 1747200:90 1804800:82"
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 30000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boost 0
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/align_windows 0
@@ -154,7 +171,7 @@ on property:persist.spectrum.profile=1
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
     ## 1843MHz (Default)
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1843200"
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
 #	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "2016000"
     ## 400MHz (Default)
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq "400000"
@@ -193,7 +210,18 @@ on property:persist.spectrum.profile=1
 	## RCU
 	write /sys/module/rcutree/parameters/rcu_idle_gp_delay 4
 	write /sys/module/rcutree/parameters/rcu_idle_lazy_gp_delay 6000
-
+	#cpu_ctrl
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres 0
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 0
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 0
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 0
+	write /dev/cpuset/top-app/cpus 0-3
+    write /dev/cpuset/foreground/cpus 0-2
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-1
+	
 # Battery
 on property:persist.spectrum.profile=2
     ##Setting Permissions
@@ -205,7 +233,9 @@ on property:persist.spectrum.profile=2
     chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
-    
+    #cpu
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
     ## CPU Governors
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
     restorecon -R /sys/devices/system/cpu # must restore after interactive
@@ -298,6 +328,17 @@ on property:persist.spectrum.profile=2
 	write /sys/module/adreno_idler/parameters/adreno_idler_idlewait 20
 	write /sys/module/adreno_idler/parameters/adreno_idler_idleworkload 5000
 	write /sys/module/adreno_idler/parameters/adreno_idler_downdifferential 20
+	#cpu_ctrl
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 1
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 1
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres 65
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 75
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 85
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 95
+    write /dev/cpuset/top-app/cpus 0-2
+    write /dev/cpuset/foreground/cpus 0-2
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-1
 
 # Gaming
 on property:persist.spectrum.profile=3
@@ -310,6 +351,9 @@ on property:persist.spectrum.profile=3
     chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
+	#cpu
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
     # Adreno Idler
     write /sys/module/adreno_idler/parameters/adreno_idler_active "N"
     ## CPU Governors BIG
@@ -320,7 +364,7 @@ on property:persist.spectrum.profile=3
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1305600
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack -1
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "70 998400:73 1056000:64 1113600:80 1190400:61 1248000:69 1305600:64 1382400:74 1612800:69 1747200:67 1843200:72"
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "70 998400:73 1056000:64 1113600:80 1190400:61 1248000:69 1305600:64 1382400:74 1612800:69 1747200:67 1804800:72"
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 30000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boost 0
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/align_windows 0
@@ -355,7 +399,7 @@ on property:persist.spectrum.profile=3
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
     ## 1843MHz
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1843200"
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
 #	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "2016000"
     ## 400MHz
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq "400000"
@@ -394,3 +438,14 @@ on property:persist.spectrum.profile=3
 	## RCU
 	write /sys/module/rcutree/parameters/rcu_idle_gp_delay 4
 	write /sys/module/rcutree/parameters/rcu_idle_lazy_gp_delay 6000
+	#cpu_ctrl
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres 0
+    write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 0
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 0
+    write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 0
+    write /dev/cpuset/top-app/cpus 0-3
+    write /dev/cpuset/foreground/cpus 0-2
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-1
