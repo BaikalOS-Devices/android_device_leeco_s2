@@ -398,10 +398,8 @@ lib64/vendor.qti.hardware.iop@1.0.so|9c7ae329d073ee5bc2d9743ca6ad6da0b7200537
 lib64/vendor.qti.hardware.iop@2.0.so|858e8bec809f800eb7ad1df8b743cdbde8c4296b
 lib64/vendor.qti.hardware.perf@1.0.so|978a16bc6f27967f6345c5b51386d50768553ab5
 vendor/bin/hw/vendor.qti.hardware.iop@2.0-service|6cd75cd82413481eca0d0071c9984e0869a6babc
-vendor/bin/hw/vendor.qti.hardware.perf@1.0-service|3f4cf13499019e7e3747679220b280f4f204b8de
 vendor/bin/msm_irqbalance|11a3dbb2cf1b35ec98fa195d03c822d4423f7118
 vendor/etc/init/vendor.qti.hardware.iop@2.0-service.rc|fd11367b2585702190ef2577ce2ce6fc68f3a2f8
-vendor/etc/init/vendor.qti.hardware.perf@1.0-service.rc|b50182aadab2e31409df61c523d0fb914a394e43
 vendor/etc/perf/commonresourceconfigs.xml|bde86ba7c42de67c1b6db13da6f80b6c9f9cc519
 vendor/etc/perf/perfboostsconfig.xml|3e4cd9bba756f5feea0d406a973384081fa7ff84
 vendor/etc/perf/targetconfig.xml|d4b8ddd4daa19d4887cca6cfdbb97c082717f20a
@@ -652,3 +650,6 @@ vendor/bin/hw/android.hardware.drm@1.1-service.widevine|320749f5ce293176b9de747d
 vendor/etc/init/android.hardware.drm@1.1-service.widevine.rc|5a01d337c1d375ee24a6c8992ba91f54afb7637e
 vendor/lib/libwvhidl.so|88ebba6280bd85e5bfea18efe2f685b0e1fb6f50
 vendor/lib64/libwvhidl.so|0c50c3cd9985fbda6a17d961f8618e6e62e545ab
+
+# ArCore
+vendor/etc/permissions/android.hardware.camera.ar.xml
