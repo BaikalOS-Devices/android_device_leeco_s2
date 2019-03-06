@@ -29,8 +29,8 @@ on property:persist.spectrum.profile=0
 	chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 	chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
 	#cpu
-	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
-    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 4
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 4
     ## Adreno Idler
     write /sys/module/adreno_idler/parameters/adreno_idler_active "Y"
     ## CPU Governors BIG
@@ -60,7 +60,7 @@ on property:persist.spectrum.profile=0
     write /sys/block/mmcblk1/queue/scheduler "fiops"
     chmod 0444 /sys/block/mmcblk0/queue/scheduler
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
-    ## 1843MHz (Default)
+    ## 1804MHz (Default)
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
     ## 400MHz (Default)
@@ -107,10 +107,12 @@ on property:persist.spectrum.profile=0
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 55
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 55
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 65
-	write /dev/cpuset/top-app/cpus 0-3
-    write /dev/cpuset/foreground/cpus 0-2
-    write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-1
+	write /dev/cpuset/foreground/cpus 0-3,5-7
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 4
+    write /dev/cpuset/system-background/cpus 5-7
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/camera-daemon/cpus 4-7
 	
 # Performance
 on property:persist.spectrum.profile=1
@@ -124,8 +126,8 @@ on property:persist.spectrum.profile=1
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
 	#cpu
-	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
-    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 4
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 4
     ## Adreno Idler
     write /sys/module/adreno_idler/parameters/adreno_idler_active "N"
     ## CPU Governors BIG
@@ -217,10 +219,12 @@ on property:persist.spectrum.profile=1
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 0
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 0
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 0
-	write /dev/cpuset/top-app/cpus 0-3
-    write /dev/cpuset/foreground/cpus 0-2
-    write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-1
+	write /dev/cpuset/foreground/cpus 0-3,5-7
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 4
+    write /dev/cpuset/system-background/cpus 5-7
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/camera-daemon/cpus 4-7
 	
 # Battery
 on property:persist.spectrum.profile=2
@@ -234,8 +238,8 @@ on property:persist.spectrum.profile=2
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
     #cpu
-	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
-    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 4
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 4
     ## CPU Governors
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
     restorecon -R /sys/devices/system/cpu # must restore after interactive
@@ -335,10 +339,12 @@ on property:persist.spectrum.profile=2
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 75
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 85
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 95
-    write /dev/cpuset/top-app/cpus 0-2
-    write /dev/cpuset/foreground/cpus 0-2
-    write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-1
+    write /dev/cpuset/foreground/cpus 0-3,5-7
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 4
+    write /dev/cpuset/system-background/cpus 5-7
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/camera-daemon/cpus 4-7
 
 # Gaming
 on property:persist.spectrum.profile=3
@@ -352,8 +358,8 @@ on property:persist.spectrum.profile=3
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
     chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
 	#cpu
-	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 2
-    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 2
+	write /sys/devices/system/cpu/cpu0/core_ctl/min_cpus 4
+    write /sys/devices/system/cpu/cpu4/core_ctl/min_cpus 4
     # Adreno Idler
     write /sys/module/adreno_idler/parameters/adreno_idler_active "N"
     ## CPU Governors BIG
@@ -397,7 +403,7 @@ on property:persist.spectrum.profile=3
     write /sys/block/mmcblk1/queue/scheduler "fiops"
     chmod 0444 /sys/block/mmcblk0/queue/scheduler
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
-    ## 1843MHz
+    ## 1804MHz
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
 #	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "2016000"
@@ -445,7 +451,9 @@ on property:persist.spectrum.profile=3
     write /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres 0
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres 0
     write /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres 0
-    write /dev/cpuset/top-app/cpus 0-3
-    write /dev/cpuset/foreground/cpus 0-2
-    write /dev/cpuset/background/cpus 0
-    write /dev/cpuset/system-background/cpus 0-1
+    write /dev/cpuset/foreground/cpus 0-3,5-7
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 4
+    write /dev/cpuset/system-background/cpus 5-7
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/camera-daemon/cpus 4-7
