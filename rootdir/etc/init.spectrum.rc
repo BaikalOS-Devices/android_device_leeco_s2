@@ -61,7 +61,7 @@ on property:persist.spectrum.profile=0
     chmod 0444 /sys/block/mmcblk0/queue/scheduler
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
     ## 1804MHz (Default)
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1401600"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
     ## 400MHz (Default)
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq "400000"
@@ -156,7 +156,7 @@ on property:persist.spectrum.profile=1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1440000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 30000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "80 400000:33 691200:25 806400:50 1017600:65 1190400:70 1305600:85 1382400:90 1401600:92 1440000:98"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "80 400000:33 691200:25 806400:50 1017600:65 1190400:70 1305600:85 1382400:90 1401600:92"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 50000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/align_windows 0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 60000
@@ -172,7 +172,7 @@ on property:persist.spectrum.profile=1
     chmod 0444 /sys/block/mmcblk0/queue/scheduler
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
     ## 1843MHz (Default)
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1401600"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
 #	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "2016000"
     ## 400MHz (Default)
@@ -191,7 +191,7 @@ on property:persist.spectrum.profile=1
   	## Thermal Throttling
 	write /sys/module/msm_thermal/parameters/enabled "Y"
 	write /sys/module/msm_thermal/core_control/enabled 1
-	write /sys/module/msm_thermal/parameters/temp_threshold 60
+	write /sys/module/msm_thermal/parameters/temp_threshold 85
     ## Adreno Boost #On
     write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 1    
     ## devfreq
@@ -388,7 +388,7 @@ on property:persist.spectrum.profile=3
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 40000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1382400
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack -1
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "80 400000:33 691200:25 806400:50 1017600:65 1190400:70 1305600:85 1382400:90 1401600:92 1440000:98"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "80 400000:33 691200:25 806400:50 1017600:65 1190400:70 1305600:85 1382400:90 1401600:92"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 50000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/align_windows 0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 60000
@@ -404,7 +404,7 @@ on property:persist.spectrum.profile=3
     chmod 0444 /sys/block/mmcblk0/queue/scheduler
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
     ## 1804MHz
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1440000"
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1401600"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
 #	write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "2016000"
     ## 400MHz
@@ -423,7 +423,7 @@ on property:persist.spectrum.profile=3
   	## Thermal Throttling
 	write /sys/module/msm_thermal/parameters/enabled "Y"
 	write /sys/module/msm_thermal/core_control/enabled 1
-	write /sys/module/msm_thermal/parameters/temp_threshold 70
+	write /sys/module/msm_thermal/parameters/temp_threshold 90
     ## Adreno Boost
     write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 3
     ## devfreq
