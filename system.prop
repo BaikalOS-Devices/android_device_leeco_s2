@@ -246,3 +246,6 @@ ro.fingerprint.cleanup.unused=false
 
 # Disables buggy in-band ringing
 persist.bluetooth.disableinbandringing=1
+
+# Pie telephony
+persist.vendor.qti.pie.telephony=1
