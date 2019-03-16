@@ -82,9 +82,6 @@ on property:persist.spectrum.profile=0
 	write /sys/module/msm_thermal/parameters/temp_threshold 65
     ## Adreno Boost
     write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 0
-    ## devfreq
-    write /sys/class/kgsl/kgsl-3d0/devfreq/governor "msm-adreno-tz"
-    write /sys/class/devfreq/cpubw/governor "bw_hwmon"
     ## GPU Clk
     write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 621330000
     write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 266666667
@@ -194,9 +191,6 @@ on property:persist.spectrum.profile=1
 	write /sys/module/msm_thermal/parameters/temp_threshold 85
     ## Adreno Boost #On
     write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 1    
-    ## devfreq
-    write /sys/class/kgsl/kgsl-3d0/devfreq/governor "performance"
-    write /sys/class/devfreq/cpubw/governor "performance"
     ## GPU Clk
     write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 621330000
     write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 432000000
@@ -247,7 +241,7 @@ on property:persist.spectrum.profile=2
     restorecon -R /sys/devices/system/cpu # must restore after interactive
     ## Tweaks GlassFish big
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 65
-	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "19000 1382400:39000"
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "20000 1190400:40000 1382400:30000"
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 30000
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1382400
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 480000
@@ -261,11 +255,11 @@ on property:persist.spectrum.profile=2
 	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration 0
     ## Tweaks GlassFish little
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 91
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay "20000 691200:19000 806400:20000 1017600:24000 1190400:38000"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1017600
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 480000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "1 400000:50"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "29 400000:88 691200:90 806400:92 1017600:93 1190400:98"
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boost 0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/align_windows 1
@@ -280,7 +274,7 @@ on property:persist.spectrum.profile=2
     chmod 0444 /sys/block/mmcblk1/queue/scheduler
     ## 1305MHz
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq "1305600"
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "1804800"
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq "9980000"
     ## 400MHz
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq "400000"
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq "400000"
@@ -300,9 +294,6 @@ on property:persist.spectrum.profile=2
 	write /sys/module/msm_thermal/parameters/temp_threshold 60
     ## Adreno Boost
     write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 0
-    ## devfreq
-    write /sys/class/kgsl/kgsl-3d0/devfreq/governor "simple_ondemand"
-    write /sys/class/devfreq/cpubw/governor "simple_ondemand"
     ## GPU Clk
     write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 60000000
     write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133333333
@@ -425,9 +416,6 @@ on property:persist.spectrum.profile=3
 	write /sys/module/msm_thermal/parameters/temp_threshold 90
     ## Adreno Boost
     write /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost 3
-    ## devfreq
-    write /sys/class/kgsl/kgsl-3d0/devfreq/governor "performance"
-    write /sys/class/devfreq/cpubw/governor "performance"
     ## GPU Clk
     write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 621330000
     write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 432000000
