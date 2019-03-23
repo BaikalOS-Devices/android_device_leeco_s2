@@ -584,3 +584,6 @@ service power_off_alarm /vendor/bin/power_off_alarm
     group system
     disabled
     oneshot
+
+on property:init.prop.toggle.iaf=1
+    restart vendor.camera-provider-2-4
