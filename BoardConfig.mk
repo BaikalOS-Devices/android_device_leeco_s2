@@ -239,6 +239,10 @@ TARGET_LD_SHIM_LIBS := \
    /system/lib64/hw/fingerprint.vendor.msm8952.so|fakelogprint.so \
    /system/bin/gx_fpd|fakelogprint.so
 
+# Dexpreopt
+WITH_DEXPREOPT := true
+DONT_DEXPREOPT_PREBUILTS := true
+
 # Wifi
 BOARD_HAS_QCOM_WLAN			:= true
 BOARD_HAS_QCOM_WLAN_SDK			:= true
