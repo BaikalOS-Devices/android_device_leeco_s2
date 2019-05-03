@@ -222,3 +222,6 @@ ro.max.fling_velocity=20000
 # Fix fingerprint
 ro.fingerprint.cleanup.unused=false
 
+# Pie telephony
+persist.vendor.qti.pie.telephony=1
+
