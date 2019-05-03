@@ -264,6 +264,10 @@ PRODUCT_COPY_FILES += \
 # Libshims
 PRODUCT_PACKAGES += \
     libshims_ims
+  
+# Lights
+PRODUCT_PACKAGES += \
+    lights.msm8952
 
 # Media
 PRODUCT_COPY_FILES += \
