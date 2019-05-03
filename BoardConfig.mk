@@ -241,6 +241,9 @@ TARGET_LD_SHIM_LIBS := \
 WITH_DEXPREOPT := true
 DONT_DEXPREOPT_PREBUILTS := true
 
+# RIL: use old mnc format
+TARGET_USE_OLD_MNC_FORMAT := true
+
 # Wifi
 BOARD_HAS_QCOM_WLAN			:= true
 BOARD_HAS_QCOM_WLAN_SDK			:= true
