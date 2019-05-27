@@ -5153,6 +5153,15 @@ cam_dimension_t QCamera3HardwareInterface::calcMaxJpegDim()
     return max_jpeg_dim;
 }
 
+/*===========================================================================
+ * FUNCTION   : patchCaps
+ *
+ * DESCRIPTION: patch some camera 0 capabilities
+ *==========================================================================*/
+void QCamera3HardwareInterface::patchCaps() // @nullbytepl patch
+{
+	gCamCapability[0]->picture_min_duration[0] = 33333000; // Set max res fps (33.333 ms, ~30 fps)
+}
 
 /*===========================================================================
  * FUNCTION   : initStaticMetadata
@@ -5173,13 +5182,8 @@ int QCamera3HardwareInterface::initStaticMetadata(uint32_t cameraId)
     size_t count = 0;
     bool limitedDevice = false;
     int64_t m_MinDurationBoundNs = 50000000; // 50 ms, 20 fps
-	/*
-	@nullbytepl patch:
-	If camera doesn't capture at max res & 20fps+ fake it to look like it does
-	*/
-	if (gCamCapability[cameraId]->picture_min_duration[0] > m_MinDurationBoundNs) {
-		gCamCapability[cameraId]->picture_min_duration[0] = 40000000; // 40 ms, 25 fps
-	}
+	
+	patchCaps(); // @nullbytepl patch: run various CamCapability releated fixes
 	
     /* If sensor is YUV sensor (no raw support) or if per-frame control is not
      * guaranteed or if min fps of max resolution is less than 20 fps, its
