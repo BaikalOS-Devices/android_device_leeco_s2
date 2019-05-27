@@ -5173,6 +5173,14 @@ int QCamera3HardwareInterface::initStaticMetadata(uint32_t cameraId)
     size_t count = 0;
     bool limitedDevice = false;
     int64_t m_MinDurationBoundNs = 50000000; // 50 ms, 20 fps
+	/*
+	@nullbytepl patch:
+	If camera doesn't capture at max res & 20fps+ fake it to look like it does
+	*/
+	if (gCamCapability[cameraId]->picture_min_duration[0] > m_MinDurationBoundNs) {
+		gCamCapability[cameraId]->picture_min_duration[0] = 40000000; // 40 ms, 25 fps
+	}
+	
     /* If sensor is YUV sensor (no raw support) or if per-frame control is not
      * guaranteed or if min fps of max resolution is less than 20 fps, its
      * advertised as limited device*/
