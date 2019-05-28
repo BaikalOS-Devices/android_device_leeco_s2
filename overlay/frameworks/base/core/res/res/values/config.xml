@@ -25,19 +25,24 @@
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
-    <integer name="config_screenBrightnessSettingMinimum">15</integer>
+    <integer name="config_screenBrightnessSettingMinimum">10</integer>
 
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">128</integer>
+    <integer name="config_screenBrightnessSettingDefault">90</integer>
+
+    <!-- Screen brightness used to dim the screen while dozing in a very low power state.
+         May be less than the minimum allowed brightness setting
+         that can be set by the user. -->
+    <integer name="config_screenBrightnessDoze">15</integer>
 
     <!-- Stability requirements in milliseconds for accepting a new brightness level.  This is used
          for debouncing the light sensor.  Different constants are used to debounce the light sensor
          when adapting to brighter or darker environments.  This parameter controls how quickly
          brightness changes occur in response to an observed change in light level that exceeds the
          hysteresis threshold. -->
-    <integer name="config_autoBrightnessBrighteningLightDebounce">2000</integer>
-    <integer name="config_autoBrightnessDarkeningLightDebounce">4000</integer>
+    <integer name="config_autoBrightnessBrighteningLightDebounce">1000</integer>
+    <integer name="config_autoBrightnessDarkeningLightDebounce">2500</integer>
 
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N + 1 control points as follows:
@@ -56,54 +61,82 @@
          backlight values for LUX levels between these control points.
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
-        <item>6</item>
-        <item>8</item>
-        <item>10</item>
-        <item>15</item>
-        <item>30</item>
-        <item>50</item>
-        <item>100</item>
-        <item>230</item>
-        <item>400</item>
-        <item>500</item>
-        <item>650</item>
-        <item>825</item>
-        <item>1000</item>
-        <item>2500</item>
-        <item>5000</item>
-        <item>6250</item>
-        <item>7500</item>
-        <item>10000</item>
-        <item>12000</item>
+	<item>2</item>
+	<item>3</item>
+	<item>4</item>
+	<item>5</item>
+	<item>8</item>
+	<item>12</item>
+	<item>20</item>
+	<item>33</item>
+	<item>55</item>
+	<item>90</item>
+	<item>148</item>
+	<item>245</item>
+	<item>403</item>
+	<item>665</item>
+	<item>1097</item>
+	<item>1808</item>
+	<item>5000</item>
+	<item>8000</item>
+	<item>10000</item>
     </integer-array>
 
     <!-- Array of output values for LCD backlight corresponding to the LUX values
          in the config_autoBrightnessLevels array.  This array should have size one greater
          than the size of the config_autoBrightnessLevels array.
+         The brightness values must be between 0 and 255 and be non-decreasing.
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
-        <item>12</item>     <!-- 0-5 -->
-        <item>16</item>     <!-- 6-7 -->
-        <item>18</item>     <!-- 8-9 -->
-        <item>20</item>     <!-- 10-14 -->
-        <item>25</item>     <!-- 15-29 -->
-        <item>28</item>     <!-- 30-49 -->
-        <item>34</item>     <!-- 50-99 -->
-        <item>37</item>     <!-- 100-229 -->
-        <item>41</item>     <!-- 239-399 -->
-        <item>48</item>     <!-- 400-499 -->
-        <item>57</item>     <!-- 500-649 -->
-        <item>75</item>     <!-- 650-824 -->
-        <item>81</item>     <!-- 825-999 -->
-        <item>90</item>     <!-- 1000-2499 -->
-        <item>100</item>    <!-- 2500-4999 -->
-        <item>125</item>    <!-- 5000-6249 -->
-        <item>165</item>    <!-- 6250-7499 -->
-        <item>200</item>    <!-- 7500-9999 -->
-        <item>225</item>    <!-- 10000-11999 -->
-        <item>255</item>    <!-- 12000-19417 (max value of light sensor) -->
+        <item>20</item>
+        <item>22</item>
+        <item>24</item>
+        <item>26</item>
+        <item>28</item>
+        <item>30</item>
+        <item>33</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>70</item>
+        <item>90</item>
+        <item>110</item>
+        <item>120</item>
+        <item>130</item>
+        <item>160</item>
+        <item>180</item>
+        <item>225</item>
+        <item>255</item>
     </integer-array>
-
+    
+    <!-- Array of output values for button backlight corresponding to the LUX values
+         in the config_autoBrightnessLevels array.  This array should have size one greater
+         than the size of the config_autoBrightnessLevels array.
+         This must be overridden in platform specific overlays -->
+    <integer-array name="config_autoBrightnessButtonBacklightValues">
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>25</item>
+        <item>26</item>
+        <item>28</item>
+        <item>30</item>
+        <item>33</item>
+        <item>35</item>
+        <item>45</item>
+        <item>50</item>
+        <item>70</item>
+        <item>90</item>
+        <item>110</item>
+        <item>120</item>
+        <item>130</item>
+        <item>160</item>
+        <item>180</item>
+        <item>225</item>
+        <item>255</item>
+    </integer-array>
+        
     <!-- Enable adjusting the button backlight -->
     <bool name="config_deviceHasVariableButtonBrightness">true</bool>
     
@@ -148,6 +181,17 @@
 
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">true</bool>
+
+    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveBatteryLed">true</bool>
+
+    <!-- Does the battery LED support multiple colors?
+         Used to decide if the user can change the colors -->
+    <bool name="config_multiColorBatteryLed">true</bool>
+
+    <!-- Do the battery/notification LEDs support pulsing?
+         Used to decide if we show pulse settings -->
+    <bool name="config_ledCanPulse">true</bool>
 
     <!-- reference volume index for music stream to limit headphone volume and display warning -->
     <integer name="config_safe_media_volume_index">10</integer>
@@ -251,12 +295,6 @@
     <!-- Flag indicating if the speed up audio on mt call code should be executed -->
     <bool name="config_speed_up_audio_on_mt_calls">true</bool>
 
-    <!-- Fast brightness animation ramp rate in brightness units per second-->
-    <integer translatable="false" name="config_brightness_ramp_rate_fast">180</integer>
-
-    <!-- Slow brightness animation ramp rate in brightness units per second-->
-    <integer translatable="false" name="config_brightness_ramp_rate_slow">60</integer>
-
     <!-- Make things go fast -->
     <bool name="config_ui_enableFadingMarquee">false</bool>
 
@@ -284,6 +322,11 @@
 
     <!-- Flag specifying whether VT is available on device -->
     <bool name="config_device_vt_available">false</bool>
+
+    <!-- Flag specifying whether VT should be available for carrier: independent of
+         carrier provisioning. If false: hard disabled. If true: then depends on carrier
+         provisioning, availability etc -->
+    <bool name="config_carrier_vt_available">true</bool>
 
     <!-- Flag specifying whether WFC over IMS is available on device -->
     <bool name="config_device_wfc_ims_available">true</bool>
@@ -354,7 +397,7 @@
         <item>XTRA_SERVER_1=http://xtrapath1.izatcloud.net/xtra2.bin</item>
         <item>XTRA_SERVER_2=http://xtrapath2.izatcloud.net/xtra2.bin</item>
         <item>XTRA_SERVER_3=http://xtrapath3.izatcloud.net/xtra2.bin</item>
-        <item>NTP_SERVER=north-america.pool.ntp.org</item>
+        <item>NTP_SERVER=europe.pool.ntp.org</item>
         <item>SUPL_MODE=1</item>
         <item>SUPL_VER=0x20000</item>
         <item>LPP_PROFILE=0</item>
@@ -442,11 +485,75 @@
           The default is false. -->
     <bool name="config_suspendWhenScreenOffDueToProximity">true</bool>
 
-<!-- Whether to cleanup fingerprints upon connection to the daemon and when user switches -->
-    <bool name="config_cleanupUnusedFingerprints">false</bool>
-
     <!-- Allow automatic adjusting of the screen brightness while dozing in low power state. -->
     <bool name="config_allowAutoBrightnessWhileDozing">true</bool>
+
+    <!-- Flag indicating whether we should enable smart battery. -->
+    <bool name="config_smart_battery_available">true</bool>
+
+    <!-- Misc -->
+    <bool name="config_buttonTextAllCaps">false</bool>
+    <dimen name="config_dialogCornerRadius">8.0dip</dimen>
+    <dimen name="config_buttonCornerRadius">4.0dip</dimen>
+    <dimen name="config_progressBarCornerRadius">1000.0dip</dimen>
+
+    <!-- Whether the always on display mode is available. -->
+    <bool name="config_dozeAlwaysOnDisplayAvailable">false</bool>
+
+    <!-- Is the notification LED brightness adjustable ? Used to decide if the user can set LED brightness -->
+    <bool name="config_adjustableNotificationLedBrightness">true</bool>
+
+    <!-- Control the behavior when the user long presses the home button.
+            0 - Nothing
+            1 - Menu key
+            2 - Recent apps view in SystemUI
+            3 - Launch assist intent
+            4 - Voice Search
+            5 - In-app Search
+            6 - Sleep
+            7 - Last app
+            8 - Toggle split screen
+         This needs to match the enums in
+         frameworks/base/core/java/com/android/internal/util/custom/hwkeys/DeviceKeysConstants.java.
+    -->
+    <integer name="config_longPressOnHomeBehaviorHwkeys">3</integer>
+
+    <!-- Hardware keys present on the device, stored as a bit field.
+         This integer should equal the sum of the corresponding value for each
+         of the following keys present:
+             1 - Home
+             2 - Back
+             4 - Menu
+             8 - Assistant (search)
+            16 - App switch
+            32 - Camera
+            64 - Volume rocker
+         For example, a device with Home, Back and Menu keys would set this
+         config to 7. -->
+    <integer name="config_deviceHardwareKeys">83</integer>
+
+    <!-- Hardware keys present on the device with the ability to wake, stored as a bit field.
+         This integer should equal the sum of the corresponding value for each
+         of the following keys present:
+             1 - Home
+             2 - Back
+             4 - Menu
+             8 - Assistant (search)
+            16 - App switch
+            32 - Camera
+            64 - Volume rocker
+         For example, a device with Home, Back and Menu keys would set this
+         config to 7. -->
+    <integer name="config_deviceHardwareWakeKeys">64</integer>
+
+    <!-- Default value for proximity check on screen wake
+     NOTE ! - Enable for devices that have a fast response proximity sensor (ideally < 300ms)-->
+    <bool name="config_proximityCheckOnWake">true</bool>
+    <integer name="config_proximityCheckTimeout">250</integer>
+    <bool name="config_proximityCheckOnWakeEnabledByDefault">false</bool>
+
+    <!-- Whether to cleanup fingerprints upon connection to the daemon and when user switches -->
+    <bool name="config_cleanupUnusedFingerprints">false</bool>
 
     <!-- Whether device ignores the RSSNR signal implementation -->
     <bool name="config_ignoreRssnrSignalLevel">true</bool>
@@ -455,4 +562,13 @@
         Internet network (except when the current default network is mobile,
         in which case a DUN network will be used if required). -->
     <bool translatable="false" name="config_tether_upstream_automatic">true</bool>
+
+    <!-- Amount of time it takes for the light sensor to warm up in milliseconds.
+         For this time after the screen turns on, the Power Manager
+         will not debounce light sensor readings -->
+    <integer name="config_lightSensorWarmupTime">200</integer>
+
+    <!-- Whether device needs to wait for Qualcomm MPCTL service to start
+	 before setting power profiles on boot. -->
+    <bool name="config_waitForMpctlOnBoot">true</bool>
 </resources>
