@@ -5156,11 +5156,47 @@ cam_dimension_t QCamera3HardwareInterface::calcMaxJpegDim()
 /*===========================================================================
  * FUNCTION   : patchCaps
  *
- * DESCRIPTION: patch some camera 0 capabilities
+ * DESCRIPTION: patch some camera capabilities
  *==========================================================================*/
 void QCamera3HardwareInterface::patchCaps() // @nullbytepl patch
 {
-	gCamCapability[0]->picture_min_duration[0] = 33333000; // Set max res fps (33.333 ms, ~30 fps)
+	ALOGI("patchCaps(): Dumping Camera 0: ");
+	ALOGI("patchCaps(): ->picture_sizes_tbl: ");
+	for (int i = gCamCapability[0]->picture_sizes_tbl_cnt - 1; i >= 0; i--)
+	{
+		ALOGI("patchCaps(): %d: %dx%d %d", i, gCamCapability[0]->picture_sizes_tbl[i].width, gCamCapability[0]->picture_sizes_tbl[i].height, (int)(gCamCapability[0]->picture_min_duration[i]/1000000));
+	}
+
+	ALOGI("patchCaps(): ->fps_ranges_tbl: ");
+	for (int i = gCamCapability[0]->fps_ranges_tbl_cnt - 1; i >= 0; i--)
+	{
+		ALOGI("patchCaps(): %d: min %f | max %f", i, gCamCapability[0]->fps_ranges_tbl[i].min_fps, gCamCapability[0]->fps_ranges_tbl[i].max_fps);
+	}
+
+	ALOGI("patchCaps(): ->preview_sizes_tbl: ");
+	for (int i = gCamCapability[0]->preview_sizes_tbl_cnt - 1; i >= 0; i--)
+	{
+		ALOGI("patchCaps(): %d: %dx%d", i, gCamCapability[0]->preview_sizes_tbl[i].width, gCamCapability[0]->preview_sizes_tbl[i].height);
+	}
+
+	ALOGI("patchCaps(): ->video_sizes_tbl: ");
+	for (int i = gCamCapability[0]->video_sizes_tbl_cnt - 1; i >= 0; i--)
+	{
+		ALOGI("patchCaps(): %d: %dx%d", i, gCamCapability[0]->video_sizes_tbl[i].width, gCamCapability[0]->video_sizes_tbl[i].height);
+	}
+
+	ALOGI("patchCaps(): ->hfr_tbl: ");
+	for (int i = gCamCapability[0]->hfr_tbl_cnt - 1; i >= 0; i--)
+	{
+		ALOGI("patchCaps(): %d: %dx%d mode %d", i, gCamCapability[0]->hfr_tbl[i].dim.width, gCamCapability[0]->hfr_tbl[i].dim.height, gCamCapability[0]->hfr_tbl[i].mode);
+	}
+
+	ALOGI("patchCaps(): ->sensitivity_range: min %d max %d", gCamCapability[0]->sensitivity_range.min_sensitivity, gCamCapability[0]->sensitivity_range.max_sensitivity);
+
+	ALOGI("patchCaps(): ->exposure_time_range: min %d max %d", (int)(gCamCapability[0]->exposure_time_range[0]/1000000), (int)(gCamCapability[0]->exposure_time_range[1]/1000000));
+
+	gCamCapability[0]->picture_min_duration[0] = 33333000; // Set 4608x3456 fps (33.333 ms, ~30 fps)
+	gCamCapability[0]->picture_min_duration[2] = 33333000; // Set 3456x3456 fps (33.333 ms, ~30 fps)
 }
 
 /*===========================================================================
@@ -5519,6 +5555,7 @@ int QCamera3HardwareInterface::initStaticMetadata(uint32_t cameraId)
             available_hfr_configs.add(fps);
        }
     }
+
     //Advertise HFR capability only if the property is set
     char prop[PROPERTY_VALUE_MAX];
     memset(prop, 0, sizeof(prop));
