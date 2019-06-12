@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package org.omnirom.device;
+package org.lineageos.settings;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import org.omnirom.device.dirac.DiracUtils;
-import org.omnirom.device.doze.DozeUtils;
+import org.lineageos.settings.dirac.DiracUtils;
+import org.lineageos.settings.doze.DozeUtils;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
     private static final boolean DEBUG = false;
-    private static final String TAG = "BaikalParts";
+    private static final String TAG = "LeEcoParts";
 
     @Override
     public void onReceive(final Context context, Intent intent) {
