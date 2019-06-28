@@ -227,7 +227,7 @@ TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 
 # Sepolicy
 SELINUX_IGNORE_NEVERALLOWS := true
-include device/qcom/sepolicy-legacy/sepolicy.mk
+include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
 # Shims
