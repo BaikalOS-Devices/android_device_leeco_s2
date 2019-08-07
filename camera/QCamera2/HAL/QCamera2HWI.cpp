@@ -1615,7 +1615,8 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(uint32_t cameraId)
       mJpegClientHandle(0),
       mJpegHandleOwner(false),
       mCACDoneReceived(false),
-      mMetadataMem(NULL)
+      mMetadataMem(NULL),
+      mBootToMonoTimestampOffset(0)
 {
 #ifdef TARGET_TS_MAKEUP
     memset(&mFaceRect, -1, sizeof(mFaceRect));
@@ -1623,7 +1624,7 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(uint32_t cameraId)
     getLogLevel();
     ATRACE_CALL();
     mCameraDevice.common.tag = HARDWARE_DEVICE_TAG;
-    mCameraDevice.common.version = CAMERA_DEVICE_API_VERSION_1_0;
+    mCameraDevice.common.version = HARDWARE_DEVICE_API_VERSION(1, 0);
     mCameraDevice.common.close = close_camera_device;
     mCameraDevice.ops = &mCameraOps;
     mCameraDevice.priv = this;
@@ -1883,6 +1884,23 @@ int QCamera2HardwareInterface::openCamera()
         }
         pthread_mutex_unlock(&gCamLock);
     }
+
+    // Setprop to decide the time source (whether boottime or monotonic).
+    // By default, use monotonic time.
+    property_get("persist.camera.time.monotonic", value, "1");
+    mBootToMonoTimestampOffset = 0;
+    if (atoi(value) == 1) {
+        // if monotonic is set, then need to use time in monotonic.
+        // So, Measure the clock offset between BOOTTIME and MONOTONIC
+        // The clock domain source for ISP is BOOTTIME and
+        // for Video/display is MONOTONIC
+        // The below offset is used to convert from clock domain of other subsystem
+        // (video/hardware composer) to that of camera. Assumption is that this
+        // offset won't change during the life cycle of the camera device. In other
+        // words, camera device shouldn't be open during CPU suspend.
+        mBootToMonoTimestampOffset = getBootToMonoTimeOffset();
+    }
+    CDBG_HIGH("mBootToMonoTimestampOffset = %lld", mBootToMonoTimestampOffset);
 
     return NO_ERROR;
 error_exit:
@@ -2579,16 +2597,15 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(
         {
             if (isNoDisplayMode()) {
                 mem = new QCameraStreamMemory(mGetMemory,
-			mCallbackCookie,
+                        mCallbackCookie,
                         bCachedMem,
                         (bPoolMem) ? &m_memoryPool : NULL,
                         stream_type);
             } else {
                 cam_dimension_t dim;
                 int minFPS, maxFPS;
-                QCameraGrallocMemory *grallocMemory = NULL;
-
-                grallocMemory = new QCameraGrallocMemory(mGetMemory, mCallbackCookie);
+                QCameraGrallocMemory *grallocMemory =
+                    new QCameraGrallocMemory(mGetMemory, mCallbackCookie);
 
                 mParameters.getStreamDimension(stream_type, dim);
                 /* we are interested only in maxfps here */
@@ -2607,7 +2624,8 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(
                     grallocMemory->setWindowInfo(mPreviewWindow,
                             dim.width,dim.height, stride, scanline,
                             mParameters.getPreviewHalPixelFormat(),
-                            maxFPS, usage);
+                            maxFPS, usage,
+                            isMonoCamera() ? CAM_FORMAT_Y_ONLY : 0);
                     pthread_mutex_lock(&mGrallocLock);
                     if (bufferCnt > CAMERA_INITIAL_MAPPABLE_PREVIEW_BUFFERS) {
                         mEnqueuedBuffers = (bufferCnt -
@@ -2851,6 +2869,13 @@ QCameraHeapMemory *QCamera2HardwareInterface::allocateStreamInfoBuf(
     memset(streamInfo, 0, sizeof(cam_stream_info_t));
     streamInfo->stream_type = stream_type;
     rc = mParameters.getStreamFormat(stream_type, streamInfo->fmt);
+    if (isMonoCamera() && stream_type == CAM_STREAM_TYPE_PREVIEW) {
+        // Display does not have support for Y ONLY.
+        // For Mono camera, stream format info for backend will be updated as Y ONLY
+        // Display will be updated as YCbCr, and CbCr data will be
+        // initialized to 128 to get the grey scale image.
+        streamInfo->fmt = CAM_FORMAT_Y_ONLY;
+    }
     rc = mParameters.getStreamDimension(stream_type, streamInfo->dim);
     rc = mParameters.getStreamRotation(stream_type, streamInfo->pp_config, streamInfo->dim);
     streamInfo->num_bufs = getBufNumRequired(stream_type);
@@ -3542,8 +3567,6 @@ int QCamera2HardwareInterface::autoFocus()
     CDBG_HIGH("[AF_DBG] %s: focusMode=%d, m_currentFocusState=%d",
             __func__, focusMode, m_currentFocusState);
 
-    m_currentFocusState = CAM_AF_STATE_INACTIVE;
-
     switch (focusMode) {
     case CAM_FOCUS_MODE_AUTO:
     case CAM_FOCUS_MODE_MACRO:
@@ -3741,6 +3764,12 @@ int32_t QCamera2HardwareInterface::configureAdvancedCapture()
     CDBG_HIGH("%s: E",__func__);
     int32_t rc = NO_ERROR;
 
+    rc = mParameters.checkFeatureConcurrency();
+    if (rc != NO_ERROR) {
+        ALOGE("%s: Cannot support Advanced capture modes", __func__);
+        return rc;
+    }
+
     setOutputImageCount(0);
     mInputCount = 0;
 
@@ -3883,7 +3912,7 @@ int32_t QCamera2HardwareInterface::configureHDRBracketing()
         mHDRBracketingEnabled = true;
     }
 
-    String8 tmp;
+    String8 tmp("");
     for (uint32_t i = 0; i < hdrFrameCount; i++) {
         tmp.appendFormat("%d",
             (int8_t) hdrBracketingSetting.exp_val.values[i]);
@@ -5120,7 +5149,7 @@ int QCamera2HardwareInterface::cancelLiveSnapshot()
 char* QCamera2HardwareInterface::getParameters()
 {
     char* strParams = NULL;
-    String8 str;
+    String8 str("");
 
     int cur_width, cur_height;
     pthread_mutex_lock(&m_parm_lock);
@@ -5132,7 +5161,7 @@ char* QCamera2HardwareInterface::getParameters()
         mParameters.m_reprocScaleParam.getPicSizeFromAPK(scale_width,scale_height);
         mParameters.getPictureSize(&cur_width, &cur_height);
 
-        String8 pic_size;
+        String8 pic_size("");
         char buffer[32];
         snprintf(buffer, sizeof(buffer), "%dx%d", scale_width, scale_height);
         pic_size.append(buffer);
@@ -5150,7 +5179,7 @@ char* QCamera2HardwareInterface::getParameters()
     if(mParameters.m_reprocScaleParam.isScaleEnabled() &&
         mParameters.m_reprocScaleParam.isUnderScaling()){
         //need set back picture size
-        String8 pic_size;
+        String8 pic_size("");
         char buffer[32];
         snprintf(buffer, sizeof(buffer), "%dx%d", cur_width, cur_height);
         pic_size.append(buffer);
@@ -6456,11 +6485,13 @@ int32_t QCamera2HardwareInterface::addPreviewChannel()
         ALOGE("%s: add metadata stream failed, ret = %d", __func__, rc);
         return rc;
     }
-
+    /* For Mono Sensor as we are not linking the pproc analysis stream
+       will not be supported */
     if (((mParameters.getDcrf() == true)
-            || (mParameters.getRecordingHintValue() != true))
-            && (!mParameters.isSecureMode())) {
-
+            || (mParameters.getRecordingHintValue() != true)
+            || (mParameters.isFDInVideoEnabled()))
+            && (!mParameters.isSecureMode()) &&
+            (getSensorType() != CAM_SENSOR_Y)) {
         rc = addStreamToChannel(pChannel, CAM_STREAM_TYPE_ANALYSIS,
                 NULL, this);
         if (rc != NO_ERROR) {
@@ -6776,7 +6807,8 @@ int32_t QCamera2HardwareInterface::addZSLChannel()
         return rc;
     }
 
-    if (!mParameters.isSecureMode()) {
+    if (!mParameters.isSecureMode() &&
+        (getSensorType() != CAM_SENSOR_Y)) {
         rc = addStreamToChannel(pChannel, CAM_STREAM_TYPE_ANALYSIS,
                 NULL, this);
         if (rc != NO_ERROR) {
@@ -7624,7 +7656,8 @@ int32_t QCamera2HardwareInterface::preparePreview()
             if (isLongshotEnabled()) {
                 sendCommand(CAMERA_CMD_LONGSHOT_OFF, arg, arg);
             }
-            if (mParameters.isFaceDetectionEnabled()) {
+            if (mParameters.isFaceDetectionEnabled()
+                    && (!mParameters.isFDInVideoEnabled())) {
                 sendCommand(CAMERA_CMD_STOP_FACE_DETECTION, arg, arg);
             }
             if (mParameters.isHistogramEnabled()) {
@@ -8601,7 +8634,7 @@ QCameraExif *QCamera2HardwareInterface::getExifData()
     pthread_mutex_lock(&m_parm_lock);
 
     // add exif entries
-    String8 dateTime, subSecTime;
+    String8 dateTime(""), subSecTime("");
     rc = mParameters.getExifDateTime(dateTime, subSecTime);
     if(rc == NO_ERROR) {
         exif->addEntry(EXIFTAGID_DATE_TIME, EXIF_ASCII,
@@ -9133,7 +9166,9 @@ void *QCamera2HardwareInterface::deferredWorkRoutine(void *obj)
                     break;
                 case CMD_DEF_PARAM_ALLOC:
                     {
+                        pthread_mutex_lock(&pme->m_parm_lock);
                         pme->mParameters.allocate();
+                        pthread_mutex_unlock(&pme->m_parm_lock);
                     }
                     break;
                 case CMD_DEF_PARAM_INIT:
@@ -9155,7 +9190,6 @@ void *QCamera2HardwareInterface::deferredWorkRoutine(void *obj)
                         pme->mParameters.init(cap,
                                 pme->mCameraHandle,
                                 pme);
-                        pthread_mutex_unlock(&pme->m_parm_lock);
                         rc = pme->mParameters.getRelatedCamCalibration(
                             &(pme->mJpegMetadata.otp_calibration_data));
                         CDBG("%s: Dumping Calibration Data Version Id %d rc %d",
@@ -9163,6 +9197,7 @@ void *QCamera2HardwareInterface::deferredWorkRoutine(void *obj)
                                 pme->mJpegMetadata.otp_calibration_data.calibration_format_version,
                                 rc);
                         if (rc != 0) {
+                            pthread_mutex_unlock(&pme->m_parm_lock);
                             ALOGE("getRelatedCamCalibration failed");
                             pme->mCameraHandle->ops->close_camera(
                                 pme->mCameraHandle->camera_handle);
@@ -9176,6 +9211,7 @@ void *QCamera2HardwareInterface::deferredWorkRoutine(void *obj)
 
                         pme->mParameters.setMinPpMask(
                             cap->qcom_supported_feature_mask);
+                        pthread_mutex_unlock(&pme->m_parm_lock);
                         pme->mExifParams.debug_params =
                                 (mm_jpeg_debug_exif_params_t *)
                                 malloc(sizeof(mm_jpeg_debug_exif_params_t));

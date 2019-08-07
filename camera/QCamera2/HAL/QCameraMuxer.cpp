@@ -2161,7 +2161,7 @@ int QCameraMuxer::cameraDeviceOpen(int camera_id,
     }
 
     cam->dev.common.tag = HARDWARE_DEVICE_TAG;
-    cam->dev.common.version = CAMERA_DEVICE_API_VERSION_1_0;
+    cam->dev.common.version = HARDWARE_DEVICE_API_VERSION(1, 0);
     cam->dev.common.close = close_camera_device;
     cam->dev.ops = &mCameraMuxerOps;
     cam->dev.priv = (void*)cam;
@@ -2346,8 +2346,8 @@ void QCameraMuxer::composeMpo(cam_compose_jpeg_info_t* main_Jpeg,
                     mpo_compose_info.primary_image.buf_vaddr,
                     mpo_compose_info.primary_image.buf_filled_len);
             fchmod(file_fd_main, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-            CDBG("%s: written number of bytes for main Image %ld\n",
-                    __func__, (long)written_len);
+            CDBG("%s: written number of bytes for main Image %zd\n",
+                    __func__, written_len);
             close(file_fd_main);
         }
 
@@ -2363,8 +2363,8 @@ void QCameraMuxer::composeMpo(cam_compose_jpeg_info_t* main_Jpeg,
                     mpo_compose_info.aux_images[0].buf_vaddr,
                     mpo_compose_info.aux_images[0].buf_filled_len);
             fchmod(file_fd_aux, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-            CDBG("%s: written number of bytes for Aux Image %ld\n",
-                    __func__, (long)written_len);
+            CDBG("%s: written number of bytes for Aux Image %zd\n",
+                    __func__, written_len);
             close(file_fd_aux);
         }
     }
@@ -2391,8 +2391,8 @@ void QCameraMuxer::composeMpo(cam_compose_jpeg_info_t* main_Jpeg,
                     m_pRelCamMpoJpeg->data,
                     m_pRelCamMpoJpeg->size);
             fchmod(file_fd_mpo, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-            CDBG("%s: written number of bytes for MPO Image %ld\n",
-                    __func__, (long)written_len);
+            CDBG("%s: written number of bytes for MPO Image %zd\n",
+                    __func__, written_len);
             close(file_fd_mpo);
         }
     }

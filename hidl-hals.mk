@@ -29,7 +29,10 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    android.hardware.camera.provider@2.4-impl
+    android.hardware.camera.provider@2.4-impl \
+    android.hardware.camera.provider@2.4-service \
+    android.hardware.camera.provider@2.4-external-service \
+    camera.device@3.2-impl    
 
 # Configstore
 PRODUCT_PACKAGES += \
@@ -71,7 +74,8 @@ PRODUCT_PACKAGES += \
 # Health HAL
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-impl \
-    android.hardware.health@2.0-service
+    android.hardware.health@2.0-service \
+    android.hardware.health@2.0
 
 # Keymaster
 PRODUCT_PACKAGES += \
