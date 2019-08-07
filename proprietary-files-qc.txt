@@ -702,3 +702,7 @@ vendor/lib64/libwvhidl.so|0c50c3cd9985fbda6a17d961f8618e6e62e545ab
 
 # ArCore
 vendor/etc/permissions/android.hardware.camera.ar.xml
+
+# Bluetooth - aptX - from mata-user 9 PPR1.181005.099 413 release-keys
+lib64/libaptX_encoder.so|0cebad28afcf29f931bdc2d24fce2730dc882ecf
+lib64/libaptXHD_encoder.so|90f47f10af28b3ead143200cb4370b847c513127
