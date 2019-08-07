@@ -34,7 +34,7 @@
     <!-- Screen brightness used to dim the screen while dozing in a very low power state.
          May be less than the minimum allowed brightness setting
          that can be set by the user. -->
-    <integer name="config_screenBrightnessDoze">15</integer>
+    <integer name="config_screenBrightnessDoze">5</integer>
 
     <!-- Stability requirements in milliseconds for accepting a new brightness level.  This is used
          for debouncing the light sensor.  Different constants are used to debounce the light sensor
@@ -571,4 +571,7 @@
     <!-- Whether device needs to wait for Qualcomm MPCTL service to start
 	 before setting power profiles on boot. -->
     <bool name="config_waitForMpctlOnBoot">true</bool>
+
+    <bool name="config_dozeAlwaysOnEnabled">true</bool>
+    <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>    
 </resources>
