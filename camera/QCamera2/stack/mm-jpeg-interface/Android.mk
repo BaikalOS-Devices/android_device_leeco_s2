@@ -1,7 +1,6 @@
 OLD_LOCAL_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(call my-dir)
 
-include $(LOCAL_PATH)/../../../common.mk
 include $(CLEAR_VARS)
 
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
@@ -9,8 +8,7 @@ LOCAL_CFLAGS+= -D_ANDROID_
 
 LOCAL_CFLAGS += -Wall -Wextra -Werror -Wno-unused-parameter
 
-LOCAL_C_INCLUDES+= $(kernel_includes)
-LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
+LOCAL_HEADER_LIBRARIES := generated_kernel_headers
 
 LOCAL_C_INCLUDES += \
     frameworks/native/include/media/openmax \
@@ -22,6 +20,10 @@ LOCAL_C_INCLUDES += \
 
 ifeq ($(strip $(TARGET_USES_ION)),true)
     LOCAL_CFLAGS += -DUSE_ION
+endif
+
+ifneq (,$(filter  msm8610,$(TARGET_BOARD_PLATFORM)))
+    LOCAL_CFLAGS+= -DLOAD_ADSP_RPC_LIB
 endif
 
 DUAL_JPEG_TARGET_LIST := msm8974
@@ -52,9 +54,9 @@ LOCAL_SRC_FILES := \
     src/mm_jpeg_mpo_composer.c
 
 LOCAL_MODULE           := libmmjpeg_interface
+LOCAL_PRELINK_MODULE   := false
 LOCAL_SHARED_LIBRARIES := libdl libcutils liblog libqomx_core
 LOCAL_MODULE_TAGS := optional
-LOCAL_VENDOR_MODULE := true
 
 LOCAL_32_BIT_ONLY := $(BOARD_QTI_CAMERA_32BIT_ONLY)
 include $(BUILD_SHARED_LIBRARY)
